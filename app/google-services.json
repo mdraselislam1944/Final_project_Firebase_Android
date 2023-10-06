@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1087685491604",
+    "project_id": "alarm-system-7e3d8",
+    "storage_bucket": "alarm-system-7e3d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087685491604:android:7587f2c168866fc456ed81",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD95Fx_Dau9-ix6TOK4h61RtmzT1pPYU14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

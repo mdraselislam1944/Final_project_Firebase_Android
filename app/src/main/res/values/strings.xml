@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Firebase</string>
+    <string-array name="HomeNaveBar">
+        <item>Show Activity</item>
+        <item>Add Activity</item>
+        <item>Profile</item>
+        <item>Calender</item>
+        <item>Notification</item>
+        <item>Notes</item>
+    </string-array>
+</resources>
