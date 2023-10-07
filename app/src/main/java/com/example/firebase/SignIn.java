@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,14 +22,16 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
     private FirebaseAuth mAuth;
     private Button saveBtn,moveBtn,moveForget;
     private EditText EmailText,PasswordText;
+    private ProgressBar progressBar;
+    boolean isProgressVisible = false;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_sign_in);
+        mAuth = FirebaseAuth.getInstance();
+        progressBar=findViewById(R.id.ProgressBarId);
         saveBtn = findViewById(R.id.SignInSaveBtn);
         moveBtn = findViewById(R.id.SignInMoveSignUpButton);
         EmailText=findViewById(R.id.SignInEmailId);
@@ -50,6 +53,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
             startActivity(intent);
         }
         if(v.getId()==R.id.SignInSaveBtn){
+            progressBar.setVisibility(View.VISIBLE);
             String email = EmailText.getText().toString().trim();
             String password = PasswordText.getText().toString().trim();
             mAuth.signInWithEmailAndPassword(email,password)
@@ -57,10 +61,14 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), "SignIn successfully", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(SignIn.this, Profile.class);
+                                startActivity(intent);
                             }
                             else {
                                 Toast.makeText(getApplicationContext(), "SignIn not successfully", Toast.LENGTH_LONG).show();
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
                     });

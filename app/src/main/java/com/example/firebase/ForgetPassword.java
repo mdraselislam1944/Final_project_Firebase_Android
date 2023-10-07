@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +22,7 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
 
     private Button SendEmailBtn,SignInMove;
     private EditText EmailId;
+    private ProgressBar progressBar;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -31,6 +33,7 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
         SendEmailBtn=findViewById(R.id.ForgetPasswordBtn);
         EmailId=findViewById(R.id.ForgetEmailId);
         SignInMove=findViewById(R.id.ForgetToSignInBtn);
+        progressBar=findViewById(R.id.ProgressBarId);
         SendEmailBtn.setOnClickListener(this);
         SignInMove.setOnClickListener(this);
     }
@@ -42,6 +45,7 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
             startActivity(intent);
         }
         if(v.getId()==R.id.ForgetPasswordBtn){
+            progressBar.setVisibility(View.VISIBLE);
             String email = EmailId.getText().toString().trim();
 
             if(email==""){
@@ -54,8 +58,10 @@ public class ForgetPassword extends AppCompatActivity implements View.OnClickLis
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "Password reset email sent and reset password in your email.", Toast.LENGTH_LONG).show();
+                                progressBar.setVisibility(View.GONE);
                             } else {
                                 Toast.makeText(getApplicationContext(), "Failed to send password reset email.", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
                     });

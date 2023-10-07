@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         HomeActivityAll=getResources().getStringArray(R.array.HomeNaveBar);
         gridView=findViewById(R.id.gridViewId);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
         CustomAdapter adapter=new CustomAdapter(this,HomeActivityAll);
         gridView.setAdapter(adapter);
@@ -31,7 +35,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String value = HomeActivityAll[position];
                 if ("Profile".equals(value)) {
-                    Intent intent = new Intent(MainActivity.this, SignIn.class);
+                    Intent intent;
+                    if(user!=null){
+                        intent = new Intent(MainActivity.this, Profile.class);
+                    }
+                    else {
+                        intent = new Intent(MainActivity.this, SignIn.class);
+                    }
                     startActivity(intent);
                 }
                 if("Calender".equals(value)){
@@ -39,11 +49,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(intent);
                 }
                 if("Add Activity".equals(value)){
-                    Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                    Intent intent;
+                    if(user!=null){
+                        intent = new Intent(MainActivity.this, MainActivity2.class);
+                    }
+                    else {
+                        intent = new Intent(MainActivity.this, SignIn.class);
+                    }
                     startActivity(intent);
                 }
                 if("Show Activity".equals(value)){
-                    Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+                    Intent intent;
+                    if(user!=null){
+                        intent =  new Intent(MainActivity.this, ShowActivity.class);
+                    }
+                    else {
+                        intent = new Intent(MainActivity.this, SignIn.class);
+                    }
                     startActivity(intent);
                 }
             }

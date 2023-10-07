@@ -1,55 +1,52 @@
 package com.example.firebase;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Vibrator;
+import android.util.Log;
+import android.widget.Toast;
 
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Create a notification channel
+        Log.d("AlarmReceiver", "Alarm received!");
 
-//        Intent intent1=new Intent(context,DestinationActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent=PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_IMMUTABLE);
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(4000);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "foxandroid",
-                    "Fox Android Channel",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            channel.setDescription("Channel description");
-            NotificationManager manager = context.getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
+        Toast.makeText(context, "Alarm! Wake up! Wake up!", Toast.LENGTH_LONG).show();
+        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alarmUri == null) {
+            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
 
-        // Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "foxandroid")
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("forandroid Alarm Manager")
-                .setContentText("Subscribe for android related content")
-                .setAutoCancel(true)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-//                .setContentIntent(pendingIntent);
+        // setting default ringtone
+        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        // play ringtone
+        ringtone.play();
 
-        // Use context instead of 'this'
-        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Handle permission request here if needed
-            return;
-        }
 
-        notificationManagerCompat.notify(123, builder.build());
+        // Extract information from the intent
+        String message = intent.getStringExtra("message");
+        int year = intent.getIntExtra("year", 0);
+        int month = intent.getIntExtra("month", 0);
+        int day = intent.getIntExtra("day", 0);
+        int hour = intent.getIntExtra("hour", 0);
+        int minute = intent.getIntExtra("minute", 0);
+
+
+        // Implement the logic to trigger the alarm (e.g., play a sound or show a notification)
+        // For simplicity, let's show a notification
+        NotificationUtils.showNotification(context, "Alarm Triggered", getFormattedDateTime(year, month, day, hour, minute) + "\n" + message);
+    }
+
+    private String getFormattedDateTime(int year, int month, int day, int hour, int minute) {
+        // Format the date and time as needed
+        return String.format("%04d-%02d-%02d %02d:%02d", year, month, day, hour, minute);
     }
 }
